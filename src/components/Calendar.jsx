@@ -174,7 +174,11 @@ export default function Calendar({
   }, [selectedDate, view, days]);
 
   return (
-    <div className="bg-white rounded-2xl shadow p-2 sm:p-4 w-full" ref={calendarRef} style={{ position: "relative" }}>
+    <div
+      className="bg-blue-50 rounded-2xl shadow p-2 sm:p-4 w-full"
+      ref={calendarRef}
+      style={{ position: "relative" }}
+    >
       <div className="flex items-center justify-between mb-2">
         <div />
         <button
