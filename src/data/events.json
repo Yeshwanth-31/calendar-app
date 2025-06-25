@@ -1,0 +1,73 @@
+[
+  
+    {
+      "title": "Morning Standup",
+      "date": "2025-06-03",
+      "startTime": "09:00",
+      "endTime": "09:30",
+      "color": "#3b82f6"
+    },
+    {
+      "title": "Design Review",
+      "date": "2025-06-05",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "color": "#f6be23"
+    },
+    {
+      "title": "Lunch with Team",
+      "date": "2025-06-07",
+      "startTime": "12:30",
+      "endTime": "13:30",
+      "color": "#10b981"
+    },
+    {
+      "title": "Project Kickoff",
+      "date": "2025-06-10",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "color": "#6366f1"
+    },
+    {
+      "title": "Doctor Appointment",
+      "date": "2025-06-12",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "color": "#f59e42"
+    },
+    {
+      "title": "Weekly Sync",
+      "date": "2025-06-14",
+      "startTime": "15:00",
+      "endTime": "16:00",
+      "color": "#f6501e"
+    },
+    {
+      "title": "1:1 with Manager",
+      "date": "2025-06-17",
+      "startTime": "14:00",
+      "endTime": "14:30",
+      "color": "#e11d48"
+    },
+    {
+      "title": "Sprint Planning",
+      "date": "2025-06-20",
+      "startTime": "10:00",
+      "endTime": "11:30",
+      "color": "#3b82f6"
+    },
+    {
+      "title": "Team Outing",
+      "date": "2025-06-21",
+      "startTime": "18:00",
+      "endTime": "21:00",
+      "color": "#f6be23"
+    },
+    {
+      "title": "Demo Day",
+      "date": "2025-06-28",
+      "startTime": "13:00",
+      "endTime": "14:00",
+      "color": "#10b981"
+    }
+  ]
