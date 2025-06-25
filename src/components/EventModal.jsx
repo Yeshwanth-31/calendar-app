@@ -45,6 +45,7 @@ export default function EventModal({
           endTime: "10:00",
           color: COLORS[0],
         }
+        
   );
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(type === "edit");

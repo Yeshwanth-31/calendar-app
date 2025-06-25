@@ -7,11 +7,19 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-i
 import dayjs from "dayjs";
 import eventsData from "./data/events.json";
 
+// Helper to generate a unique id (simple incremental or timestamp-based)
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
 export default function App() {
   // Load events from localStorage or fallback to static JSON
   const [events, setEvents] = useState(() => {
     const stored = localStorage.getItem("events");
-    return stored ? JSON.parse(stored) : eventsData;
+    let loaded = stored ? JSON.parse(stored) : eventsData;
+    // Ensure all events have an id
+    loaded = loaded.map(ev => ev.id ? ev : { ...ev, id: generateId() });
+    return loaded;
   });
 
   // Persist events to localStorage
@@ -59,21 +67,21 @@ export default function App() {
       // If editing, modalEvent is the original event object
       if (
         modalType === "edit" ||
-        (modalType === "view" && modalEvent) ||
-        (modalType === "list" && modalEvent)
+        (modalType === "view" && modalEvent && modalEvent.id) ||
+        (modalType === "list" && modalEvent && modalEvent.id)
       ) {
-        // Replace the event by reference
-        return prev.map(e => e === modalEvent ? { ...event } : e);
+        // Update by id
+        return prev.map(e => e.id === modalEvent.id ? { ...event, id: modalEvent.id } : e);
       }
-      // Otherwise, add new event
-      return [...prev, event];
+      // Otherwise, add new event with a new id
+      return [...prev, { ...event, id: generateId() }];
     });
     setModalOpen(false);
   };
 
   // Remove event (optional, for demo)
   const handleDeleteEvent = (event) => {
-    setEvents((prev) => prev.filter((e) => e !== event));
+    setEvents((prev) => prev.filter((e) => e.id !== event.id));
     setModalOpen(false);
   };
 
