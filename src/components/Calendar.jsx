@@ -160,6 +160,10 @@ export default function Calendar({
   const [popupIdx, setPopupIdx] = React.useState(null);
   const calendarRef = React.useRef(null);
 
+  // Tooltip state for event hover (fix: only one tooltip at a time)
+  const [hoveredEvent, setHoveredEvent] = React.useState(null);
+  const [tooltipPos, setTooltipPos] = React.useState({ x: 0, y: 0 });
+
   // Show popup when selectedDate changes
   React.useEffect(() => {
     if (!selectedDate) {
@@ -174,11 +178,7 @@ export default function Calendar({
   }, [selectedDate, view, days]);
 
   return (
-    <div
-      className="bg-blue-50 rounded-2xl shadow p-2 sm:p-4 w-full"
-      ref={calendarRef}
-      style={{ position: "relative" }}
-    >
+    <div className="bg-white rounded-2xl shadow p-2 sm:p-4 w-full" ref={calendarRef} style={{ position: "relative" }}>
       <div className="flex items-center justify-between mb-2">
         <div />
         <button
@@ -257,45 +257,45 @@ export default function Calendar({
                 {isCurrentMonth &&
                   visibleEvents.map((event, i) => {
                     const isConflict = overlaps[i];
-                    // Tooltip state for each event
-                    const [showTooltip, setShowTooltip] = React.useState(false);
-                    const [tooltipPos, setTooltipPos] = React.useState({ x: 0, y: 0 });
-
+                    // --- FIX: Remove useState from here, use parent state ---
                     // Tooltip for normal events (timing)
+                    const showTooltip = hoveredEvent === event;
                     const eventTooltip = (
-                      <div
-                        className="pointer-events-none z-50"
-                        style={{
-                          position: "fixed",
-                          left: tooltipPos.x,
-                          top: tooltipPos.y,
-                          transform: "translateY(-110%)",
-                        }}
-                      >
+                      showTooltip && (
                         <div
-                          className="rounded-lg shadow-xl border border-blue-200 bg-white px-4 py-2 min-w-[120px] max-w-xs"
+                          className="pointer-events-none z-50"
                           style={{
-                            background: "linear-gradient(135deg, #f0f4f8 60%, #e0e7ef 100%)",
-                            boxShadow: "0 8px 32px 0 rgba(31,38,135,0.14)",
-                            borderColor: "#bfdbfe"
+                            position: "fixed",
+                            left: tooltipPos.x,
+                            top: tooltipPos.y,
+                            transform: "translateY(-110%)",
                           }}
                         >
-                          <div className="flex items-center gap-2 mb-1">
-                            <span
-                              className="inline-block w-2 h-2 rounded-full"
-                              style={{ background: event.color }}
-                            />
-                            <span className="font-semibold text-gray-800 text-sm truncate">{event.title}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-blue-700 font-bold">
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" className="inline-block mr-1" style={{ verticalAlign: "middle" }}>
-                              <rect x="4" y="4" width="16" height="16" rx="4" fill="#3b82f6"/>
-                              <path d="M8 12h8M12 8v8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-                            </svg>
-                            {event.startTime} - {event.endTime}
+                          <div
+                            className="rounded-lg shadow-xl border border-blue-200 bg-white px-4 py-2 min-w-[120px] max-w-xs"
+                            style={{
+                              background: "linear-gradient(135deg, #f0f4f8 60%, #e0e7ef 100%)",
+                              boxShadow: "0 8px 32px 0 rgba(31,38,135,0.14)",
+                              borderColor: "#bfdbfe"
+                            }}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <span
+                                className="inline-block w-2 h-2 rounded-full"
+                                style={{ background: event.color }}
+                              />
+                              <span className="font-semibold text-gray-800 text-sm truncate">{event.title}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-blue-700 font-bold">
+                              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" className="inline-block mr-1" style={{ verticalAlign: "middle" }}>
+                                <rect x="4" y="4" width="16" height="16" rx="4" fill="#3b82f6"/>
+                                <path d="M8 12h8M12 8v8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+                              </svg>
+                              {event.startTime} - {event.endTime}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )
                     );
 
                     return (
@@ -320,11 +320,11 @@ export default function Calendar({
                               x: rect.right + 8,
                               y: rect.top + 8
                             });
-                            setShowTooltip(true);
+                            setHoveredEvent(event);
                           }
                         }}
                         onMouseLeave={() => {
-                          if (!isConflict) setShowTooltip(false);
+                          if (!isConflict) setHoveredEvent(null);
                         }}
                         onClick={ev => {
                           ev.stopPropagation();
@@ -386,7 +386,7 @@ export default function Calendar({
                           </span>
                         )}
                         {/* Custom tooltip for normal events */}
-                        {!isConflict && showTooltip && eventTooltip}
+                        {eventTooltip}
                       </div>
                     );
                   })}
